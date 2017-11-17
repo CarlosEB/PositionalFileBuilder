@@ -7,17 +7,17 @@ namespace PositionalFileBuilder.MapExample
     {
         public MapAccount()
         {
-            TotalSize = 76;
+            TotalSize = 86;
 
             Map(f => f.Operation).Position("1-20").Filler('_');
-            Map(f => f.OperationDate.ToShortDateString()).Position("21-27");
-            Map(f => f.TransactionType).Position("28-38").Padding(JustifiedEnum.RightJustified);
-            MapFiller().Position("39-40");
-            Map(f => f.Amount).Position("41-50");
-            MapFiller().Position("51");
-            Map(f => f.Fee).Position("52-60");
-            MapFiller().Position("61-65");
-            Map(f => f.Discount).Position("66-76");
+            Map(f => f.OperationDate).Position("21-39");
+            Map(f => f.TransactionType).Position("40-48").Padding(JustifiedEnum.RightJustified);
+            MapFiller().Position("49-50").Filler('|');
+            Map(f => f.Amount).Position("51-60");
+            MapFiller().Position("61-62").Filler('|');
+            Map(f => f.Fee).Position("63-70");
+            MapFiller().Position("71");
+            Map(f => f.Discount).Position("72-86");
 
             MapCheck();
         }        

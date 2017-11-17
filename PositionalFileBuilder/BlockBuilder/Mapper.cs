@@ -48,7 +48,7 @@ namespace PositionalFileBuilder.BlockBuilder
             MapObjects.OrderBy(o => o.PositionStart).ToList().ForEach(item =>
             {
                 var value = item.Compiled?.Invoke(pocmex).ToString() ?? string.Empty;
-
+                if (value.Length > item.Size) throw new ArgumentException($"Size of value is bigger than size of position. Informed: {value.Length}. Expected: {item.Size}. Diff: {value.Length - item.Size}.");
                 stb.Append(item.Padding == JustifiedEnum.RightJustified
                     ? value.PadLeft(item.Size, item.Filler)
                     : value.PadRight(item.Size, item.Filler));
