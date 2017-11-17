@@ -46,10 +46,10 @@ namespace PositionalFileBuilder.BlockBuilder
 
         public bool IsNumericType(Type type)
         {
-            return NumericTypes.Contains(type) || NumericTypes.Contains(Nullable.GetUnderlyingType(type));
+            return _numericTypes.Contains(type) || _numericTypes.Contains(Nullable.GetUnderlyingType(type));
         }
 
-        private static readonly HashSet<Type> NumericTypes = new HashSet<Type>
+        private readonly HashSet<Type> _numericTypes = new HashSet<Type>
         {
             typeof(int),
             typeof(uint),

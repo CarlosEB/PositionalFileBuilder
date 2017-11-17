@@ -15,8 +15,10 @@ namespace PositionalFileBuilder.BlockBuilder
 
         private readonly Regex _positionCheckerStartEnd;
         private readonly Regex _positionChecker;
-
         private readonly StringBuilder _buffer;
+
+        public int TotalSize { get; set; }
+        public bool IncludeNewLine { get; set; }
 
         protected Mapper()
         {
@@ -27,28 +29,26 @@ namespace PositionalFileBuilder.BlockBuilder
             _buffer = new StringBuilder();
         }
 
-        public string Serialize(TEntity pocmex)
+        public string Serialize(TEntity entity)
         {
-            var stb = GetBuilder(pocmex);
-
-            return stb.ToString();
+            return GetBuilder(entity).ToString();
         }
 
-        public void SerializeToBuffer(TEntity pocmex)
+        public void SerializeToBuffer(TEntity entity)
         {
-            var stb = GetBuilder(pocmex);
-
-            _buffer.Append(stb);
+            _buffer.Append(GetBuilder(entity));
         }
 
-        private StringBuilder GetBuilder(TEntity pocmex)
+        private StringBuilder GetBuilder(TEntity entity)
         {
             var stb = new StringBuilder();
 
             MapObjects.OrderBy(o => o.PositionStart).ToList().ForEach(item =>
             {
-                var value = item.Compiled?.Invoke(pocmex).ToString() ?? string.Empty;
+                var value = item.Compiled?.Invoke(entity).ToString() ?? string.Empty;
+
                 if (value.Length > item.Size) throw new ArgumentException($"Size of value is bigger than size of position. Informed: {value.Length}. Expected: {item.Size}. Diff: {value.Length - item.Size}.");
+
                 stb.Append(item.Padding == JustifiedEnum.RightJustified
                     ? value.PadLeft(item.Size, item.Filler)
                     : value.PadRight(item.Size, item.Filler));
@@ -63,10 +63,6 @@ namespace PositionalFileBuilder.BlockBuilder
         {
             return _buffer.ToString();
         }
-
-        public int TotalSize { get; set; }
-
-        public bool IncludeNewLine { get; set; }
 
         #region Interfaces
 
